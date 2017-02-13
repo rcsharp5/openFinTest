@@ -6,13 +6,9 @@ function testSpawns() {
     var self = this;
     this.init = function () {
         document.getElementById('startTest').addEventListener('click', self.buttonTest);
-        document.getElementById('clear').addEventListener('click', self.clear);
     };
-    this.clear = function () {
-        document.getElementById("debugLogs").innerHTML = "";
-    };
-    this.buttonTest = function () {
 
+    this.buttonTest = function () {
         var params = {
             appCount: Number(document.getElementById('spawnCount').value),
             windowCount: Number(document.getElementById('windowCount').value),
@@ -26,7 +22,6 @@ function testSpawns() {
         }
     };
     function log(text) {
-        document.getElementById("debugLogs").innerHTML += JSON.stringify(text);
         request
             .post('/savelog')
             .send(text)

@@ -1,21 +1,21 @@
 var gulp = require('gulp');
 var clean = require('gulp-clean');
 var path = require('path');
-var webpack = require('webpack-stream');
+//var webpack = require('webpack-stream');
+var webpack = require('gulp-webpack');
 var gutil = require("gulp-util");
 var watch = require('gulp-watch');
 var async = require("async");
 var openfinLauncher = require('openfin-launcher'),
 	configPath = __dirname + '/desktop-local.json';
-console.log("configPath", configPath)
 function launchOpenfin() {
 	openfinLauncher.launchOpenFin({
 		configPath: configPath
 	});
 }
 gulp.task('clean-scripts', function () {
-	return gulp.src('dist/js/*.js', { read: false })
-		.pipe(clean());
+	return gulp.src(__dirname + '/dist/js', { read: false })
+		.pipe(clean({ force: true }));
 });
 gulp.task("watch", function () {
 	return watch(["src/**/*"], {
@@ -27,7 +27,9 @@ gulp.task("watch", function () {
 
 
 gulp.task("devServer", ["build"], function (callback) {
-
+	gulp.watch(['./src/**/*.js'], function () {
+		gulp.start('build');
+	});
 	var exec = require('child_process').exec;
 	var serverExec = exec('node server.js');
 	serverExec.stdout.on("data", function (data) {
@@ -41,8 +43,8 @@ gulp.task("devServer", ["build"], function (callback) {
 var webpackConfig = {
 	devtool: 'source-map',
 	entry: {
-		"main": path.join(__dirname, "src/main.js"),
-		"child": path.join(__dirname, "src/child.js")
+		"main": __dirname + "/src/main.js",
+		"child": __dirname + "/src/child.js"
 	},
 	stats: {
 		warnings: true
@@ -64,7 +66,7 @@ var webpackConfig = {
 	},
 	output: {
 		filename: "[name].js",
-		path: path.resolve(__dirname, 'dist/js/')
+		path: __dirname + "/dist/js/"
 	},
 	resolve: {
 		extensions: ['', '.js', '.jsx', '.json'],
@@ -74,10 +76,12 @@ var webpackConfig = {
 	},
 }
 gulp.task("build", ["clean-scripts"], function () {
-	return gulp.src('./webpack.config.js')
+	return gulp.src(__dirname + '/webpack.config.js')
 		.pipe(webpack(webpackConfig))
-		.pipe(gulp.dest('dist/js'));
-
+		.pipe(gulp.dest(__dirname + '/dist/js'))
+		.on('error', function (err) {
+			console.log(err)
+		});
 });
 
 
