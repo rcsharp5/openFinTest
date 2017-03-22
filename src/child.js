@@ -46,6 +46,7 @@ function log(text) {
 function runOpenFinTest(loopNumber, params, callback) {
     var spawnCount = params.windowCount;
     var wins = [];
+   
     function spawnOpenFin(i, cb) {
         log("window creation Started " + UUID + ":::" + i + "  Start Time:" + moment().format('MMMM Do YYYY, h:mm:ss a'))
         var newWin = new fin.desktop.Window({
@@ -75,7 +76,7 @@ function runOpenFinTest(loopNumber, params, callback) {
             saveWindowState: false,
             frameConnect: 'main-window'
         }, function () {
-            log("window created " + UUID + ":::" + i + "  End Time:" + moment().format('MMMM Do YYYY, h:mm:ss a'))
+            log("window finshed " + UUID + ":::" + i + "  End Time:" + moment().format('MMMM Do YYYY, h:mm:ss a'))
             cb(null, newWin);
 
         }, function (err) {

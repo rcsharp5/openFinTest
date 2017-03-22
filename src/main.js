@@ -9,6 +9,7 @@ function testSpawns() {
     };
 
     this.buttonTest = function () {
+        console.log("click")
         var params = {
             appCount: Number(document.getElementById('spawnCount').value),
             windowCount: Number(document.getElementById('windowCount').value),
@@ -66,7 +67,7 @@ function testSpawns() {
             console.log("Error creating application:", error);
         });
         app.addEventListener("closed", function (event) {
-            log("testApplication" + index + UUID + "::closed");
+           // log("testApplication" + index + UUID + "::closed");
         }, function () {
 
         }, function (reason) {
